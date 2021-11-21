@@ -7,33 +7,28 @@ namespace StudyDemo1
 {
     /// <summary>
     /// 反射：在程序运行时，程序能够获取到一些程序集、class、method、property信息的机制
-    ///       
-    /// abstract 抽象类，
     /// </summary>
     public class T08_Reflection
     {
-
         /// <summary>
-        /// 获取 Type 类型的反射
+        /// 获取 Type 
         /// </summary>
         public static void GetType()
         {
-            // 方式一
-            string s = "aaa";
-            Type t = s.GetType();
-            Console.WriteLine(t.FullName);
+            // 方式一: 通过反射加载dll文件
+            Assembly assembly = Assembly.Load("Ant.DB.SqlServer");
+            Type[] types = assembly.GetTypes();         // 根据程序集对象获取type
 
-            // 方式二
-            Type t2 = Type.GetType("System.String", false, true);
-            Console.WriteLine(t2.FullName);
+            // 方式二: 通过实例对象获取 type
+            DbHelper obj1 = new MySqlHelper();
+            Type t1 = obj1.GetType();
+            MethodInfo m1 = t1.GetMethod("Query");
 
-            // 方式三
-            Type t3 = typeof(string);
-            Console.WriteLine(t3.FullName);
-
+            // 方式三: 通过引用类型获取 type
+            Type t3 = typeof(MySqlHelper);
         }
         /// <summary>
-        /// 获取方法的反射
+        /// 获取 Type 的方法
         /// </summary>
         public static void GetMethods(Type t)
         {
@@ -51,15 +46,6 @@ namespace StudyDemo1
             BindingFlags flag = BindingFlags.Public | BindingFlags.Instance;
             MethodInfo[] infos = t.GetMethods(flag);
         }
-
-        /// <summary>
-        /// 根据 GetFields, GetProperties 获取字段或者属性
-        /// </summary>
-        public static void GetFields()
-        {
-
-        }
-
 
         // 动态加载及推迟绑定
 
@@ -93,16 +79,13 @@ namespace StudyDemo1
 
 
 
+        #region 反射应用场景：动态创建数据库
 
-        #region 抽象类
-
-        //特性：不能实例化
-        //      可以包含抽象方法和抽象访问器
-        //      不能用 seald 修饰符修饰抽象类，因为这两个修饰符的含义是相反的。采用sealed修饰符的类无法继承，而abstract修饰符要求对类进行继承
-        //      从抽象类派生的非抽象类必须包括继承的所有抽象方法和抽象访问器的实际实现
-
-        //应用场景：一些方法并且想让他们中的一些有默认实现
-
+        public static void CreateDatebase()
+        {
+            DbHelper helper = DbHelperFactory.CreateInstance();
+            helper.Query();
+        }
 
         #endregion
 
@@ -119,4 +102,85 @@ namespace StudyDemo1
         }
     }
 
+    #region 数据库类
+
+    /// <summary>
+    /// 数据库
+    /// </summary>
+    public interface DbHelper
+    {
+        void Query();
+    }
+    public class MySqlHelper : DbHelper
+    {
+        public void Query()
+        {
+            Console.WriteLine("mysql 链接");
+        }
+    }
+    public class SqlServerHelper : DbHelper
+    {
+        public void Query()
+        {
+            Console.WriteLine("sqlServer 链接");
+        }
+    }
+    /// <summary>
+    /// 工厂类：封装数据库，提供实例
+    /// </summary>
+    public class DbHelperFactory
+    {
+        private static string GetDbString()
+        {
+            // 1.加载配置
+            Type type = typeof(DBHelperConfig);
+            DBHelperAttribute attribute = (DBHelperAttribute)type.GetCustomAttribute(typeof(DBHelperAttribute));
+            return attribute.DBString;
+        }
+
+        public static DbHelper CreateInstance()
+        {
+            // 1.反射的加载
+            Assembly assembly = Assembly.LoadFrom("StudyDemo1.dll");
+
+            // 2.创建反射类型
+            Type type = assembly.GetType(GetDbString());
+
+            // 3.创建对象实例（如 DbHelper）
+            //object helper = Activator.CreateInstance(type);
+            //helper.Query();       // 报错原因：因为编译器不允许,可以使用动态类型       情况一
+
+            //dynamic dy = Activator.CreateInstance(type);                               情况二：动态类型
+            //dy.Query();             // 可以原因：编译器允许通过
+
+            //DbHelper helper = (DbHelper)Activator.CreateInstance(type);                //情况三：强转
+
+            DbHelper helper = Activator.CreateInstance(type) as DbHelper;                // 情况四：类型转换(as 转换不报错，类型不对返回null)。创建这个接口为了通用
+
+            return helper;
+        }
+    }
+
+    /// <summary>
+    /// DBHelper 特性
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple =true)]
+    public class DBHelperAttribute : Attribute
+    {
+        public string DBString { get; set; }
+        public DBHelperAttribute(string dbString)
+        {
+            DBString = dbString;
+        }
+    }
+    /// <summary>
+    /// 数据库切换配置类
+    /// </summary>
+    [DBHelperAttribute("StudyDemo1.MySqlHelper")]
+    public class DBHelperConfig
+    {
+        
+    }
+
+    #endregion
 }

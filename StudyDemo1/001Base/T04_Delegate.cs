@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static StudyDemo1.Ticket12306;
+
+
+delegate int AddDelegate(int n);
+delegate T GenericDelegate<T>(T num);
 
 namespace StudyDemo1
 {
     /// <summary>
-    /// 委托，类似C++中的函数指针。有时候我们想调用一个方法，在编译时不知道哪个方法被调用，在被执行时确定哪个方法被调用
-    /// 采用匿名的方式，参数和返回值确定，是实现事件和回调函数的基础
-    /// 委托本质上是一个类，继承自multicastDelegate
+    /// 委托
     /// </summary>
     public class T04_Delegate
     {
         static int num = 10;
-
-
 
         public static int AddNum(int p)
         {
@@ -32,12 +33,20 @@ namespace StudyDemo1
             return num;
         }
 
+        public static T ShowT<T>(T num)
+        {
+            Console.WriteLine("{0}", num);
+            return num;
+        }
+
+        #region 委托使用
+
         /// <summary>
         /// 使用委托
         /// </summary>
         public static void UseDelegate()
         {
-            AddDelegate ad = new AddDelegate(AddNum);
+            AddDelegate ad = new AddDelegate(AddNum);  // 委托对象
             ad(12);
 
             AddDelegate am = new AddDelegate(MultiNum);
@@ -63,9 +72,69 @@ namespace StudyDemo1
             Console.ReadLine();
         }
 
+        #endregion
+
+        #region 泛型委托
+        public static void UseGeneric()
+        {
+            // 
+            GenericDelegate<int> obj = new GenericDelegate<int>(ShowT);
+            obj(123456);
+        }
+
+        #endregion
+
+        #region 12306 卖票场景
+
+        public static void Use()
+        {
+            // 1. 创建12306
+            Ticket12306 t = new Ticket12306();
+            //t.SellTicket();
+
+            // 2. 创建委托对象
+            SellTicketDelegate action = new SellTicketDelegate(t.SellTicket);
+
+            // 3. 创建第三方网站（飞猪）
+            TicketPig pig = new TicketPig();
+            pig.SellTicket(action);
+        }
+
+        #endregion
     }
 
 
-    delegate int AddDelegate(int n);
+    public class Ticket12306
+    {
+        /// <summary>
+        /// 卖票委托方法
+        /// </summary>
+        public delegate void SellTicketDelegate();
 
+        /// <summary>
+        /// 卖票方法
+        /// </summary>
+        public void SellTicket()
+        {
+            Console.WriteLine("12306 开始买票");
+        }
+    }
+
+    /// <summary>
+    /// 飞猪卖票网站
+    /// </summary>
+    public class TicketPig
+    {
+        
+
+        /// <summary>
+        /// 卖票（12306委托类）
+        /// </summary>
+        public void SellTicket(SellTicketDelegate action)
+        {
+            action();
+        }
+    }
+
+    
 }

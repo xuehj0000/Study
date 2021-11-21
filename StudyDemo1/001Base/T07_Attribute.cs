@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace StudyDemo1
 {
@@ -22,7 +23,59 @@ namespace StudyDemo1
             Console.WriteLine("方法二！");
         }
 
+        #region 反射操作特性
 
+        public static void Use()
+        {
+            // 1.反射类型
+            Type type = typeof(Student);
+
+            // 2.判断类型上是否有自定义特性
+            if(type.IsDefined(typeof(HelpAttribute), true))
+            {
+                // 3.获取类型上的特性
+                foreach(object item in type.GetCustomAttributes(typeof(HelpAttribute), true))
+                {
+                    // 4.自定义特性
+                    HelpAttribute obj = (HelpAttribute)item;
+                    Console.WriteLine(obj.Description);
+                    obj.ShowName();
+                }
+            }
+
+            // 5.获取字段
+            PropertyInfo[] properties = type.GetProperties();
+            //PropertyInfo property = type.GetProperty("Id");
+            foreach(var prop in properties)
+            {
+                if(prop.IsDefined(typeof(HelpAttribute), true))
+                {
+                    foreach(object item in prop.GetCustomAttributes(typeof(HelpAttribute), true))
+                    {
+                        HelpAttribute obj = (HelpAttribute)item;
+                        obj.ShowName();
+                    }
+                }
+            }
+
+            // 6.获取方法
+            MethodInfo[] methods = type.GetMethods();
+            //MethodInfo method = type.GetMethod("GetName");
+            foreach(var method in methods)
+            {
+                if(method.IsDefined(typeof(HelpAttribute), true))
+                {
+                    foreach (object item in method.GetCustomAttributes(typeof(HelpAttribute), true))
+                    {
+                        // 4.自定义特性
+                        HelpAttribute obj = (HelpAttribute)item;
+                    }
+                }
+            }
+
+        }
+
+        #endregion
 
         #region 特性信息获取,利用反射
 
@@ -53,23 +106,23 @@ namespace StudyDemo1
     [AttributeUsage(AttributeTargets.Class, AllowMultiple =false, Inherited =false)]
     public class HelpAttribute : Attribute
     {
-        protected string _description;
         public HelpAttribute(string description)
         {
-            _description = description;
+            Description = description;
         }
 
-        public string Description
-        {
-            get
-            {
-                return this._description;
-            }
-        }
+        public string Description { get; set; }
+
         /// <summary>
         /// 有名词的属性，使用时，可以直接用name赋值，可有可无
         /// </summary>
         public string Name { get; set; }
+
+        public void ShowName()
+        {
+            Console.WriteLine(this.Name);
+        }
+
     }
 
     [Help("this is a do-nothing class", Name = "名字信息")]
