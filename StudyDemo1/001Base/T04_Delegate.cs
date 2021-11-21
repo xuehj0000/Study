@@ -7,6 +7,7 @@ namespace StudyDemo1
     /// <summary>
     /// 委托，类似C++中的函数指针。有时候我们想调用一个方法，在编译时不知道哪个方法被调用，在被执行时确定哪个方法被调用
     /// 采用匿名的方式，参数和返回值确定，是实现事件和回调函数的基础
+    /// 委托本质上是一个类，继承自multicastDelegate
     /// </summary>
     public class T04_Delegate
     {
