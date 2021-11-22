@@ -4,12 +4,15 @@ using System.Text;
 
 namespace StudyDemo2_ORM
 {
+    /// <summary>
+    /// 属性映射特性
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class ColumnAttribute:MappingAttribute
+    public class MColumnAttribute:MappingAttribute
     {
         //private string ColumnName = null;
 
-        public ColumnAttribute(string columnName):base(columnName)
+        public MColumnAttribute(string columnName):base(columnName)
         {
             //ColumnName = columnName;
         }

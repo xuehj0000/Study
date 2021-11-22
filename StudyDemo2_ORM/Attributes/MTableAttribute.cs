@@ -4,12 +4,15 @@ using System.Text;
 
 namespace StudyDemo2_ORM
 {
+    /// <summary>
+    /// 表/类映射特性
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class TableAttribute : MappingAttribute
+    public class MTableAttribute : MappingAttribute
     {
         //private string TableName = null;
 
-        public TableAttribute(string tableName):base(tableName)
+        public MTableAttribute(string tableName):base(tableName)
         {
             //TableName = tableName;
         }

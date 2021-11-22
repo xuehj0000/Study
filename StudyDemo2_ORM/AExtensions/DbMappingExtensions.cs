@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace StudyDemo2_ORM
@@ -51,6 +53,14 @@ namespace StudyDemo2_ORM
             {
                 return t.Name;
             }
+        }
+
+        /// <summary>
+        /// 获取类型属性，返回过滤掉忽略特性的属性集合
+        /// </summary>
+        public static IEnumerable<PropertyInfo> GetPropsWithOutIgnore(this Type type)
+        {
+            return type.GetProperties().Where(r => !r.IsDefined(typeof(PropIgnoreAttribute), true));
         }
 
     }

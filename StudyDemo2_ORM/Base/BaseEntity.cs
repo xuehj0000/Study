@@ -6,6 +6,7 @@ namespace StudyDemo2_ORM
 {
     public class BaseEntity
     {
+        [PropIgnoreAttribute]
         public int Id { get; set; }
     }
 }

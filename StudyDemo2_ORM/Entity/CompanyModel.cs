@@ -7,7 +7,7 @@ namespace StudyDemo2_ORM
     /// 改了数据库表，不想改代码
     /// 实体跟数据库的表&字段，不完全一致
     /// </summary>
-    [Table("Company")]
+    [MTable("Company")]
     public class CompanyModel:BaseEntity
     {
         public string Name { get; set; }

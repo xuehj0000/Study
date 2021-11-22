@@ -9,7 +9,11 @@ namespace StudyDemo2_ORM
             try
             {
                 SqlHelper sqlHelper = new SqlHelper();
-                var model = sqlHelper.Find<CompanyModel>(1);
+                var user = sqlHelper.Find<User>(1);
+                user.Name = "111111";
+                user.Status = 3;
+                sqlHelper.Update(user);
+
 
             }
             catch (Exception ex)
