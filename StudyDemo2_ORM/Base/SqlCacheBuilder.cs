@@ -37,14 +37,14 @@ namespace StudyDemo2_ORM
             {
                 // 查询
                 Type type = typeof(T);
-                var columnString = string.Join(",", type.GetProperties().Select(r => $"[{r.GetMappingName()}]"));
+                var columnString = type.GetProperties().Select(r => $"[{r.GetMappingName()}]").ToJoin();
                 _findOneSql = $@"select {columnString} from [{type.GetMappingName()}] where Id=@Id";                    
             }
 
             {
                 // 编辑
                 Type type = typeof(T);
-                var columnString = string.Join(",", type.GetPropsWithOutIgnore().Select(r => $"{r.GetMappingName()}=@{r.GetMappingName()}"));
+                var columnString = type.GetPropsWithOutIgnore().Select(r => $"{r.GetMappingName()}=@{r.GetMappingName()}").ToJoin();
                 _updateSql = $@"update [{type.GetMappingName()}] set { columnString } where Id=@Id";
 
             }
@@ -52,8 +52,8 @@ namespace StudyDemo2_ORM
             {
                 // 插入
                 Type type = typeof(T);
-                var columnStrings = string.Join(",", type.GetPropsWithOutIgnore().Select(r => $"[{r.GetMappingName()}]"));
-                var valueStrings = string.Join(",", type.GetPropsWithOutIgnore().Select(r => $"@{r.GetMappingName()}"));
+                var columnStrings = type.GetPropsWithOutIgnore().Select(r => $"[{r.GetMappingName()}]").ToJoin();
+                var valueStrings = type.GetPropsWithOutIgnore().Select(r => $"@{r.GetMappingName()}").ToJoin();
                 _insertSql = $@"insert into [{type.GetMappingName()}] ({columnStrings}) values ({valueStrings})";
             }
 
