@@ -24,9 +24,10 @@ namespace StudyDemo2_ORM
         #endregion
 
         
-        private static string insertSql = null;
-        private static string updateSql = null;
-        private static string findOneSql = null;
+        private static string _insertSql = null;
+        private static string _updateSql = null;
+        private static string _findOneSql = null;
+        private static string _deleteSql = null;
 
         /// <summary>
         /// 静态构造函数，会在程序第一次使用该函数之前完成初始化
@@ -34,17 +35,17 @@ namespace StudyDemo2_ORM
         static SqlCacheBuilder()
         {
             {
-                // 新增
+                // 查询
                 Type type = typeof(T);
                 var columnString = string.Join(",", type.GetProperties().Select(r => $"[{r.GetMappingName()}]"));
-                findOneSql = $@"select {columnString} from [{type.GetMappingName()}] where Id=@Id";                    
+                _findOneSql = $@"select {columnString} from [{type.GetMappingName()}] where Id=@Id";                    
             }
 
             {
                 // 编辑
                 Type type = typeof(T);
                 var columnString = string.Join(",", type.GetPropsWithOutIgnore().Select(r => $"{r.GetMappingName()}=@{r.GetMappingName()}"));
-                updateSql = $@"update [{type.GetMappingName()}] set { columnString } where Id=@Id";
+                _updateSql = $@"update [{type.GetMappingName()}] set { columnString } where Id=@Id";
 
             }
 
@@ -53,7 +54,13 @@ namespace StudyDemo2_ORM
                 Type type = typeof(T);
                 var columnStrings = string.Join(",", type.GetPropsWithOutIgnore().Select(r => $"[{r.GetMappingName()}]"));
                 var valueStrings = string.Join(",", type.GetPropsWithOutIgnore().Select(r => $"@{r.GetMappingName()}"));
-                insertSql = $@"insert into [{type.GetMappingName()}] ({columnStrings}) values ({valueStrings})";
+                _insertSql = $@"insert into [{type.GetMappingName()}] ({columnStrings}) values ({valueStrings})";
+            }
+
+            {
+                // 删除
+                Type type = typeof(T);
+                _deleteSql = $@"delete from [{type.GetMappingName()}] where Id=@Id";
             }
         }
 
@@ -62,14 +69,13 @@ namespace StudyDemo2_ORM
             switch (cacheType)
             {
                 case SqlCacheType.FindOne:
-                    return findOneSql;
-
+                    return _findOneSql;
                 case SqlCacheType.Insert:
-                    return insertSql;
-
+                    return _insertSql;
                 case SqlCacheType.Update:
-                    return updateSql;
-
+                    return _updateSql;
+                case SqlCacheType.Delete:
+                    return _deleteSql;
                 default:
                     throw new Exception("unkown type");
             }
@@ -81,7 +87,8 @@ namespace StudyDemo2_ORM
     {
         FindOne,
         Insert,
-        Update
+        Update,
+        Delete
     }
 
 
