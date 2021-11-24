@@ -10,8 +10,7 @@ namespace StudyDemo2_ORM
     /// </summary>
     public class SqlHelper
     {
-        private static string ConnectionStringCustomer = ConfigurationManager.SqlConnectionStringCustom;
-
+        //private static string ConnectionStringCustomer = ConfigurationManager.SqlConnectionStringCustom;
         /// <summary>
         /// 泛型查询
         /// </summary>
@@ -38,7 +37,7 @@ namespace StudyDemo2_ORM
                 {
                     return null;
                 }
-            });
+            }, SqlConnectionStringPool.DBOperateType.Read);
         }
 
         public T Find<T>(Expression<Func<T, bool>> queryExpression) where T : BaseEntity,new()
@@ -71,7 +70,7 @@ namespace StudyDemo2_ORM
                 {
                     return null;
                 }
-            });
+            }, SqlConnectionStringPool.DBOperateType.Read);
         }
 
         /// <summary>
@@ -123,9 +122,9 @@ namespace StudyDemo2_ORM
         /// <summary>
         /// 封装Ado.Net,重复代码集中在一起，方便维护升级。集中管理Ado.Net操作集中起来，避免写错
         /// </summary>
-        private S ExexuteSql<S>(string sql, SqlParameter[] parameters, Func<SqlCommand, S> func)
+        private S ExexuteSql<S>(string sql, SqlParameter[] parameters, Func<SqlCommand, S> func, SqlConnectionStringPool.DBOperateType type = SqlConnectionStringPool.DBOperateType.Write)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionStringCustomer))
+            using (SqlConnection conn = new SqlConnection(SqlConnectionStringPool.GetConnectionString(type)))
             {
                 SqlCommand command = new SqlCommand(sql, conn);
                 if (parameters != null) command.Parameters.AddRange(parameters);
@@ -133,6 +132,65 @@ namespace StudyDemo2_ORM
                 return func.Invoke(command);
             }
         }
+    }
+
+    /// <summary>
+    /// 读写分离帮助类，负载均衡策略
+    /// </summary>
+    public class SqlConnectionStringPool
+    {
+        
+
+        private static int iIndex = 0;
+
+        internal static string GetConnectionString(DBOperateType type)
+        {
+            string conn = string.Empty;
+            switch (type)
+            {
+                case DBOperateType.Write:
+                    conn = ConfigurationManager.SqlConnectionStringWrite;
+                    break;
+                case DBOperateType.Read:
+                    conn = DispatcherConn();
+                    break;
+                default:
+                    throw new Exception("错误的访问类型！");
+            }
+            return conn;
+        }
+
+        
+        // 三个或更多的从库，需要从中何时的选择一个库，负载均衡策略
+        private static string DispatcherConn()
+        {
+            var readArr = ConfigurationManager.SqlConnectionStringRead;
+            var conn = readArr[iIndex++ % readArr.Length];                  //方式一：轮询式分配 访问从库  --调度策略
+
+            //var conn = readArr[new Random().Next(0, readArr.Length)];     //方式二：随机分配
+
+            #region 方式三：权重配置。  配置不同，不同从库的任务不同  权重值：1,2,3 
+            //string[] connAll = new string[]
+            //{
+            //    ConfigurationManager.SqlConnectionStringRead[0],
+            //    ConfigurationManager.SqlConnectionStringRead[1],
+            //    ConfigurationManager.SqlConnectionStringRead[1],
+            //    ConfigurationManager.SqlConnectionStringRead[2],
+            //    ConfigurationManager.SqlConnectionStringRead[2],
+            //    ConfigurationManager.SqlConnectionStringRead[2],
+            //};
+            //conn = connAll[new Random(iIndex++).Next(0, connAll.Length)];
+            #endregion
+
+            return conn;
+        }
+
+        internal enum DBOperateType
+        {
+            Write,
+            Read
+        }
+
     }
 
     #region 笔记

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Threading;
 
 namespace StudyDemo2_ORM
 {
@@ -10,8 +11,27 @@ namespace StudyDemo2_ORM
             try
             {
                 SqlHelper sqlHelper = new SqlHelper();
-                var user = sqlHelper.Find<CompanyModel>(r => r.Id == 2);
 
+                #region 验证 主--从 库 同步时间大约是多少
+                var company = sqlHelper.Find<CompanyModel>(r => r.Id == 2);
+                company.Name += "你大爷";
+                bool result = sqlHelper.Update(company);
+                Console.WriteLine($"主库已更新!{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff")}");
+                while (true)
+                {
+                    var model = sqlHelper.Find<CompanyModel>(2);
+                    if (company.Name.Equals(model.Name))
+                    {
+                        Console.WriteLine($"同步成功！{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff")}");
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("从库尚未同步成功...");
+                        Thread.Sleep(100);
+                    }
+                }
+                #endregion
             }
             catch (Exception ex)
             {
