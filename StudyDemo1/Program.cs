@@ -6,7 +6,8 @@ namespace StudyDemo1
     {
         static void Main(string[] args)
         {
-            QuartZManager.Init().GetAwaiter().GetResult() ;
+            //T16_QuartZ.Init().GetAwaiter().GetResult() ;
+            T15_AOP.Use();
             Console.ReadLine();
         }
     }

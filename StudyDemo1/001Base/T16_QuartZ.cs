@@ -11,7 +11,7 @@ namespace StudyDemo1
     /// <summary>
     /// 调度任务
     /// </summary>
-    public class QuartZManager
+    public class T16_QuartZ
     {
         public async static Task Init()
         {
@@ -169,9 +169,10 @@ namespace StudyDemo1
 
         public async Task TriggerMisfired(ITrigger trigger, CancellationToken cancellationToken = default)
         {
-            await Task.Run(()=> {
+            await Task.Run(() =>
+            {
                 Console.WriteLine("this is TriggerMisfired");
-            })
+            });
         }
 
         /// <summary>
