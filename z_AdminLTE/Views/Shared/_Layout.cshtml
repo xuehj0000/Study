@@ -57,10 +57,10 @@
             <!-- 图标 -->
             <a href="index2.html" class="logo">
                 <div class="logo-mini">
-                    <img src="favicon.ico" alt="logo" style="width:50px; border-radius:10px;"/>
+                    <img src="@Url.Content("~/favicon.ico")" alt="logo" style="width:50px; border-radius:15px;padding:8px;"/>
                 </div>
                 <div class="logo-lg">
-                    <img src="favicon.ico" alt="logo" style="width: 50px; border-radius: 10px; margin-right: 5px;"/>
+                    <img src="@Url.Content("~/favicon.ico")" alt="logo" style="width: 50px; border-radius:15px; padding:8px;"/>
                     后台管理
                 </div>
             </a>
@@ -203,9 +203,9 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#">菜单管理</a></li>
-                            <li><a href="#">角色管理</a></li>
-                            <li><a href="#">用户管理</a></li>
+                            <li><a href="/Home/Index">菜单管理</a></li>
+                            <li><a href="/Home/Contact">角色管理</a></li>
+                            <li><a href="/Home/About">用户管理</a></li>
                         </ul>
                     </li>
                 </ul>
