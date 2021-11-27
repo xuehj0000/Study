@@ -17,14 +17,52 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .content-header {
+            height: 40px;
+            background-color: pink;
+            padding: 0;
+            border-bottom: 1px solid #e3e1e1;
+        }
+        .content-header:before, .content-header:after {
+            display: inline-block;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            opacity: .9;
+            width: 50px;
+            height: 40px;
+            line-height: 40px;
+            background-color: #e3e1e1;
+        }
+        .content-header:before {
+            content: '<';
+            
+        }
+        .content-header:after {
+            content: '>';
+            float:right;
+        }
+        .content-header div {
+            display: inline-block;
+            padding: 0 15px;
+            line-height: 40px;
+            border-right: 1px solid #e3e1e1;
+        }
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
         <header class="main-header">
             <!-- 图标 -->
             <a href="index2.html" class="logo">
-                <span class="logo-mini"><b>后</b>台</span>
-                <span class="logo-lg"><b>后台</b>管理</span>
+                <div class="logo-mini">
+                    <img src="favicon.ico" alt="logo" style="width:50px; border-radius:10px;"/>
+                </div>
+                <div class="logo-lg">
+                    <img src="favicon.ico" alt="logo" style="width: 50px; border-radius: 10px; margin-right: 5px;"/>
+                    后台管理
+                </div>
             </a>
 
             <nav class="navbar navbar-static-top" role="navigation">
@@ -175,27 +213,15 @@
         </aside>
         <div class="content-wrapper">
             <section class="content-header">
-                <h1>
-                    首页
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="javascript:void(0);"><i class="fa fa-dashboard"></i> Level</a></li>
-                    <li class="active">Here</li>
-                </ol>
+                <div>
+                    <span style="display:inline-block; width:9px;height:9px;border-radius:4.5px;background-color:#2d8cf0;margin-right:5px;"></span>首页
+                </div>
             </section>
-            <!-- Main content -->
             <section class="content container-fluid">
-                <!--------------------------
-                | Your Page Content Here |
-                -------------------------->
                 @RenderBody()
             </section>
-            <!-- /.content -->
         </div>
         <footer class="main-footer">
-            <div class="pull-right hidden-xs">
-                Anything you want
-            </div>
             <strong>Copyright &copy; 2021 <a href="#">Company</a>.</strong> 所有版权.
         </footer>
     </div>
