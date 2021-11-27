@@ -3,10 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace z_AdminLTE
 {
@@ -19,13 +15,13 @@ namespace z_AdminLTE
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // 此方法由运行时调用。使用此方法向容器中添加服务。
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // 此方法由运行时调用。使用此方法配置HTTP请求管道。
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
