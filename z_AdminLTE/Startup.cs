@@ -19,17 +19,8 @@ namespace z_AdminLTE
         // 此方法由运行时调用。使用此方法向容器中添加服务。
         public void ConfigureServices(IServiceCollection services)
         {
-            // 连接SqlServer
-            services.AddDapper("SqlDb", r =>
-            {
-                r.ConnectionString = Configuration.GetConnectionString("Default");
-                r.DbType = DbType.SqlServer;
-            });
-
-            // 配置增加控制器和视图，Razor页面样式改变后自动编译
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();  
-
-            // 权限验证配置
+            services.AddDapper("SqlDb", r => { r.ConnectionString = Configuration.GetConnectionString("Default"); r.DbType = DbType.SqlServer; });
+            services.AddControllersWithViews(options => { options.Filters.Add<GlobalExceptionsFilter>(); }).AddRazorRuntimeCompilation();  
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => { options.LoginPath = "/Login/Index"; });
         }
 
