@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,17 +9,26 @@ namespace z_AdminLTE
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // 此方法由运行时调用。使用此方法向容器中添加服务。
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();  // 配置增加控制器和视图，Razor页面样式改变后自动编译
+
+            //services.AddDbContext<MyDBContext>(options =>
+            //{
+            //    options.UseMySql(Configuration.GetConnectionString("Defualt"));
+            //});
+
+            // 权限验证配置
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => { options.LoginPath = "/Login/Index"; });
+
         }
 
         // 此方法由运行时调用。使用此方法配置HTTP请求管道。
@@ -32,17 +42,18 @@ namespace z_AdminLTE
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
 
+            app.UseStaticFiles();
             app.UseRouting();
 
+            // 登录验证
+            app.UseAuthentication();
+            // 授权验证
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Login}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

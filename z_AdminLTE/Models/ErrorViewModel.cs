@@ -1,6 +1,6 @@
 using System;
 
-namespace z_AdminLTE.Models
+namespace z_AdminLTE
 {
     public class ErrorViewModel
     {
