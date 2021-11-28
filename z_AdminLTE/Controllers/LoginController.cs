@@ -39,6 +39,7 @@ namespace z_AdminLTE.Controllers
         /// 加载注册页面
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();

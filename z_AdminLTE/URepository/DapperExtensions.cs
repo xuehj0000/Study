@@ -18,7 +18,7 @@ namespace z_AdminLTE
             return services;
         }
 
-        public static IDapperFactoryBuilder AddDapper(this IServiceCollection services, string name, Action<ConnectionConfig> configureClient)
+        public static IDapperFactoryBuilder AddDapper(this IServiceCollection services, string name, Action<ConnConfig> configureClient)
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
@@ -36,7 +36,7 @@ namespace z_AdminLTE
             return builder;
         }
 
-        public static IDapperFactoryBuilder ConfigureDapper(this IDapperFactoryBuilder builder, Action<ConnectionConfig> configureClient)
+        public static IDapperFactoryBuilder ConfigureDapper(this IDapperFactoryBuilder builder, Action<ConnConfig> configureClient)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));

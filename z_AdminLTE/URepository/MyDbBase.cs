@@ -14,15 +14,15 @@ namespace z_AdminLTE
     /// </summary>
     public class MyDbBase
     {
-        public ConnectionConfig CurrentConnectionConfig { get; set; }
+        public ConnConfig ConnConfig { get; set; }
 
-        public MyDbBase(ConnectionConfig config)
+        public MyDbBase(ConnConfig config)
         {
-            CurrentConnectionConfig = config;
+            ConnConfig = config;
         }
-        public MyDbBase(IOptionsMonitor<ConnectionConfig> config)
+        public MyDbBase(IOptionsMonitor<ConnConfig> config)
         {
-            CurrentConnectionConfig = config.CurrentValue;
+            ConnConfig = config.CurrentValue;
         }
 
         
@@ -32,10 +32,10 @@ namespace z_AdminLTE
         {
             get
             {
-                switch (CurrentConnectionConfig.DbType)
+                switch (ConnConfig.DbType)
                 {
                     case DbType.SqlServer:
-                        _connection = new SqlConnection(CurrentConnectionConfig.ConnectionString);
+                        _connection = new SqlConnection(ConnConfig.ConnString);
                         break;
                     default:
                         throw new Exception("未指定数据库类型！");
@@ -178,13 +178,24 @@ namespace z_AdminLTE
 
 
 
-
-    public class ConnectionConfig
+    /// <summary>
+    /// 数据库配置信息
+    /// </summary>
+    public class ConnConfig
     {
-        public string ConnectionString { get; set; }
+        /// <summary>
+        /// 连接字符串
+        /// </summary>
+        public string ConnString { get; set; }
+        /// <summary>
+        /// 数据库类型，默认是sqlserver
+        /// </summary>
         public DbType DbType { get; set; } = DbType.SqlServer;
     }
 
+    /// <summary>
+    /// 数据库类型
+    /// </summary>
     public enum DbType
     {
         SqlServer = 0
@@ -192,7 +203,7 @@ namespace z_AdminLTE
 
     public class DapperOptions
     {
-        public IList<Action<ConnectionConfig>> DapperActions { get; } = new List<Action<ConnectionConfig>>();
+        public IList<Action<ConnConfig>> DapperActions { get; } = new List<Action<ConnConfig>>();
     }
 
 

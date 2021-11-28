@@ -6,12 +6,10 @@ namespace z_AdminLTE
 {
     public class DbFactory : IDbFactory
     {
-        //private readonly IServiceProvider _services;
         private readonly IOptionsMonitor<DapperOptions> _optionsMonitor;
 
-        public DbFactory(IServiceProvider services, IOptionsMonitor<DapperOptions> optionsMonitor)
+        public DbFactory(IOptionsMonitor<DapperOptions> optionsMonitor)
         {
-            //_services = services ?? throw new ArgumentNullException(nameof(services));
             _optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
         }
 
@@ -22,10 +20,10 @@ namespace z_AdminLTE
                 throw new ArgumentNullException(nameof(name));
             }
 
-            var client = new MyDbBase(new ConnectionConfig { });
+            var client = new MyDbBase(new ConnConfig { });
             var option = _optionsMonitor.Get(name).DapperActions.FirstOrDefault();
             if (option != null)
-                option(client.CurrentConnectionConfig);
+                option(client.ConnConfig);
             else
                 throw new ArgumentNullException(nameof(option));
 
