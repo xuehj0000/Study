@@ -1,69 +1,43 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace z_AdminLTE
 {
     /// <summary>
     /// 全局异常错误日志
     /// </summary>
-    public class GlobalExceptionsFilter: IExceptionFilter
+    public class GlobalExceptionsFilter: IAsyncExceptionFilter
     {
-        private readonly IWebHostEnvironment _env;
         private readonly ILogger<GlobalExceptionsFilter> _logger;
-
-        public GlobalExceptionsFilter(IWebHostEnvironment env, ILogger<GlobalExceptionsFilter> logger)
+        public GlobalExceptionsFilter(ILogger<GlobalExceptionsFilter> logger)
         {
-            _env = env;
             _logger = logger;
         }
 
-        public void OnException(ExceptionContext context)
+        public Task OnExceptionAsync(ExceptionContext context)
         {
-            var json = new JsonErrorResponse();
-
-            json.Message = context.Exception.Message;//错误信息
-            var errorAudit = "Unable to resolve service for";//特殊错误信息
-            if (!string.IsNullOrEmpty(json.Message) && json.Message.Contains(errorAudit))
+            if(context.ExceptionHandled == false)
             {
-                json.Message = json.Message.Replace(errorAudit, $"（若新添加服务，需要重新编译项目）{errorAudit}");
+                var ret = new SysResult(false, context.Exception.Message);
+                context.Result = new ContentResult()
+                {
+                    StatusCode = StatusCodes.Status200OK,             // 返回状态码设置为200，表示成功
+                    ContentType = "application/json;charset=utf-8",   // 设置返回格式
+                    Content = JsonConvert.SerializeObject(ret)
+                };
+                var msg = ret.Msg + string.Format("\r\n【自定义错误】：{0} \r\n【异常类型】：{1} \r\n【异常信息】：{2} \r\n【堆栈调用】：{3}", new object[] { ret.Msg, context.Exception.GetType().Name, context.Exception.Message, context.Exception.StackTrace });
+                _logger.LogError(msg);
             }
-
-            if (_env.IsDevelopment())
-            {
-                json.DevelopmentMessage = context.Exception.StackTrace;//堆栈信息
-            }
-            context.Result = new InternalServerErrorObjectResult(json);
-
-            //输出错误日志信息
-            //_logger.LogError(json.Message + WriteLog(json.Message, context.Exception));
-            _logger.LogError(json.Message + string.Format("\r\n【自定义错误】：{0} \r\n【异常类型】：{1} \r\n【异常信息】：{2} \r\n【堆栈调用】：{3}", new object[] { json.Message, context.Exception.GetType().Name, context.Exception.Message, context.Exception.StackTrace }));
+            // 设置为true，表示异常已经被处理了
+            context.ExceptionHandled = true;
+            return Task.CompletedTask;
         }
-    }
-
-
-
-    public class InternalServerErrorObjectResult : ObjectResult
-    {
-        public InternalServerErrorObjectResult(object value) : base(value)
-        {
-            StatusCode = StatusCodes.Status500InternalServerError;
-        }
-    }
-    //返回错误信息
-    public class JsonErrorResponse
-    {
-        /// <summary>
-        /// 生产环境的消息
-        /// </summary>
-        public string Message { get; set; }
-        /// <summary>
-        /// 开发环境的消息
-        /// </summary>
-        public string DevelopmentMessage { get; set; }
     }
 }

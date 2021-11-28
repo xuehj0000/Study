@@ -69,17 +69,18 @@ namespace z_AdminLTE.Controllers
                     }
                     else
                     {
-                        return RedirectToAction(nameof(Login));
+                        RedirectToAction(nameof(Login));
                     }
                 }
                 else
                 {
-                    return UnprocessableEntity(ModelState);
+                    UnprocessableEntity(ModelState);
                 }
-                return Redirect(user.ReturnUrl ?? "/");
+                return RedirectToAction("Index", "Home");
             }
             catch(Exception ex)
             {
+                Console.WriteLine("", ex.Message);
                 return null;
             }
         }
@@ -91,7 +92,7 @@ namespace z_AdminLTE.Controllers
         public async Task<IActionResult> LoginOut()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction(nameof(Index));
         }
         #endregion
 
