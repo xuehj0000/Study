@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace z_AdminLTE
 {
-    public static class DapperFactoryCollectionExtensions
+    public static class DapperExtensions
     {
         public static IServiceCollection AddDapper(this IServiceCollection services)
         {
