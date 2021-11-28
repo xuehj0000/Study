@@ -15,11 +15,10 @@ namespace z_AdminLTE.Controllers
     [Authorize]  
     public class LoginController : Controller
     {
-        private readonly MyDBContext _context;
-
-        public LoginController(MyDBContext context)
+        private readonly MyDbBase _services;
+        public LoginController(IDbFactory factory)
         {
-            _context = context;
+            _services = factory.CreateClient("SqlDb");
         }
 
 
@@ -51,27 +50,38 @@ namespace z_AdminLTE.Controllers
         /// <summary>
         /// 登录请求
         /// </summary>
+        [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> Login(User user)
         {
-            if (ModelState.IsValid)//模型数据验证
+            try
             {
-                //if (await _context.Users.AnyAsync(a => a.Account == user.Account && a.Password == user.Password))//登陆验证
-                //{
-                //    var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Account) };
-                //    var claimnsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                //    await HttpContext.SignInAsync(new ClaimsPrincipal(claimnsIdentity), new AuthenticationProperties { IsPersistent = true });
-                //}
-                //else
-                //{
-                //    return RedirectToAction(nameof(Login));
-                //}
-            }
-            else
-            {
-                return UnprocessableEntity(ModelState);
-            }
-            return Redirect(user.ReturnUrl ?? "/");
+                if (ModelState.IsValid)//模型数据验证
+                {
+                    var sql = $"select * from [dbo].[User] where Account=N'{user.Account}' and Password='{user.Password}'";
 
+                    var model = _services.QueryFirst<User>(sql);
+                    if (model != null)
+                    {
+                        var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Account) };
+                        var claimnsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        await HttpContext.SignInAsync(new ClaimsPrincipal(claimnsIdentity), new AuthenticationProperties { IsPersistent = true });
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(Login));
+                    }
+                }
+                else
+                {
+                    return UnprocessableEntity(ModelState);
+                }
+                return Redirect(user.ReturnUrl ?? "/");
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
 
 
