@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace StudyDemo4_UserService.Controllers
 {
+    [CtmActionFilter]
     [ApiController]
     [Route("/user/[controller]")]
     public class WeatherForecastController : ControllerBase
