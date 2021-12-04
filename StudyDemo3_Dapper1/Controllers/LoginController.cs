@@ -9,7 +9,7 @@ namespace StudyDemo3_Dapper.Controllers
     {
 
         [HttpGet("{n}/{p}")]  // 设置传参规则
-        public Users Get(string n, string p)
+        public User Get(string n, string p)
         {
             var dal = new UserDAL();
             var model = dal.GetUserByLogin(n, p);
@@ -31,5 +31,12 @@ namespace StudyDemo3_Dapper.Controllers
         //    var model = dal.GetUserByLogin(name, password);
         //    return model;
         //}
+        [HttpGet("{id}")]
+        public User Get(int id)
+        {
+            var user = new UserDAL().Find(id);
+            return user;
+        }
+
 }
 }

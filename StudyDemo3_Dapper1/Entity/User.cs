@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace StudyDemo3_Dapper
 {
-    public class Users : BaseEntity
+    public class User : BaseEntity
     {
         public string UserNo { get; set; }
         public string UserName { get; set; }

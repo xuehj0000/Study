@@ -9,10 +9,19 @@ namespace StudyDemo3_Dapper
     {
         DapperHelper _db = new DapperHelper();
 
-        public Users GetUserByLogin(string userName, string password)
+        public User GetUserByLogin(string userName, string password)
         {
             var sql = "select * from users where userName=@userName and Password=@password";
-            var user = _db.QueryFirst<Users>(sql, new { userName, password });
+            var user = _db.QueryFirst<User>(sql, new { userName, password });
+            if (user == null)
+                return default;
+            else
+                return user;
+        }
+
+        public User Find(int id)
+        {
+            var user = new DapperExtHelper<User>().Get(id);
             if (user == null)
                 return default;
             else
