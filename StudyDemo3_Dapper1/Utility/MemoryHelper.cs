@@ -23,7 +23,7 @@ namespace StudyDemo3_Dapper
         {
             if(!_memoryCache.TryGetValue(key, out object value))
             {
-                value = new DapperExtHelper<Post>().GetAll();
+                value = new DapperExtHelper<Posts>().GetAll();
                 Set(key, value);
             }
             return value;

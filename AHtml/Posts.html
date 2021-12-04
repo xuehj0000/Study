@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/top.css">
+    <script src="https://vuejs.org/js/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="components/top.js"></script>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    
+    #showPad{
+        width: 98%;
+        border: 1px solid #ccc;
+        margin: 20px auto;
+    }
+    #showPad .nav{
+        padding-top: 6px;
+        padding-bottom: 6px;
+        padding-left: 10px;
+    }
+    #showPad .nav .main-page{
+        display: inline-block;
+        width: 16px;
+        background: url() no-repeat 0 0;
+        overflow: hidden;
+    }
+    #showPad .nav a:active{
+        color: #666;
+    }
+
+    #showPad .background{
+        width: 100%;
+        text-align: center;
+    }
+
+    #showPad .background h2{
+        color: blue;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    #edit{
+        width: 98%;
+        margin: auto;
+        border: 1px solid #fff;
+        margin-bottom:10px;
+    }
+    #edit button{
+        background-color: rgb(19, 73, 175);
+        color: #fff;
+        border-bottom: 0 none;
+        width: 80px;
+        height: 32px;
+    }
+    #post{
+        width: 98%;
+        margin: auto;
+        border: 1px solid #ccc;
+        margin-bottom: 20px;
+    }
+    #post table{
+        width: 100%;
+        border-collapse: collapse;
+    }
+    #post table thead td:first-child{
+        text-align: left;
+    }
+    #post table thead td{
+        background-color: #eee;
+        height: 40px;
+        font-size: 14px;
+        text-align: center;
+    }
+    #post table thead td span{
+        margin-left: 20px;
+        color: cornflowerblue;
+    }
+    #post table tbody td{
+        height: 40px;
+        font-size: 14px;
+    }
+    #post table tbody td.post-icon{
+        height: 20px;
+        padding: 0 6px;
+    }
+    #post table tbody td.post-name a{
+        color: #333;
+        text-decoration: none;
+    }
+    #post table tbody td.post-name a:active{
+        color: #333;
+    }
+    #post table tbody tr{
+        border-bottom: 1px solid #ccc;
+    }
+    #post table tbody tr:last-child{
+        border-bottom: 0 none;
+        margin: 0 6px;
+    }
+    #post table tbody td span{
+        display: block;
+        text-align: center;
+        font-size: 12px;
+    }
+    #post table tbody td span:last-child{
+        color: #999;
+    }
+    #loginPad{
+        position: fixed;
+        left: 40%;
+        top: 20%;
+        height: 266px;
+        width: 388px;
+        background-color: #fff;
+        border:5px solid #ccc;
+        border-radius: 3px;
+    }
+    #loginPad p{
+        width: 80%;
+        margin: auto;
+    }
+    #loginPad input{
+        width: 100%;
+        margin-top: 20px;
+        height: 30px;
+        border-radius: 3px;
+        border:1px solid #666;
+        display: block;
+    }
+    #loginPad button{
+        width: 100%;
+        margin-top: 20px;
+        height: 36px;
+        border-radius: 3px;
+        border: 1px solid brown;
+        background-color: brown;
+        display: block;
+        color: #fff;
+        cursor: pointer;
+    }
+    #loginPad h3{
+        text-align: center;
+        margin-top: 20px;
+    }
+    #loginPad >span{
+        float: right;
+        border: 1px solid #ccc;
+        display: block;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        cursor: pointer;
+    }
+    #loginPad p i{
+        color: red;
+        font-size: 14px;
+    }
+</style>
+<body>
+    <div id="app">
+        <top @showloginpad="showLogin" :userName="userName"></top>
+        <div id="showPad">
+            <div class="nav">
+                <a class="main-page"></a>
+                <em></em>
+                <a>单机游戏</a>
+                <em></em>
+                <a>《全面战争：三国》</a>
+            </div>
+            <div class="background">
+                <img src="" alt="">
+                <h2>《全面战争：三国》等你来战</h2>
+            </div>
+        </div>
+        <div id="edit">
+            <button>发帖</button>
+        </div>
+        <div id="post">
+            <table>
+                <thead>
+                    <tr>
+                        <td colspan="2">
+                            <span>全部主题</span>
+                            <span>最新</span>
+                            <span>热门</span>
+                            <span>热帖</span>
+                            <span>精华</span>
+                        </td>
+                        <td>作者</td>
+                        <td>回复/查看</td>
+                        <td>最后发表</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="post-icon">
+                            <img src="" alt="">
+                        </td>
+                        <td class="post-name">
+                            <em>[资源]</em>
+                            <a href="">全面战争：三国（Total）优惠券</a>
+                        </td>
+                        <td><span>Ace</span><span>2020-05-12</span></td>
+                        <td><span>18</span><span>136</span></td>
+                        <td><span>Ace</span><span>2020-05-12 12:18</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="loginPad" v-show="isshowLoginPad">
+            <span @click="showLogin(false)">×</span>
+            <h3>用户登录</h3>
+            <p>
+                <input type="text" name="userName" id="userName" v-model="userNameInput" placeholder="输入用户名">
+            </p>
+            <p>
+                <input type="password" name="pwd" id="pwd" v-model="passwordInput" placeholder="输入密码">
+            </p>
+            <p>
+                <button @click="login">登录</button>
+            </p>
+            <p>
+                <i v-show="isShowWarn">*账号或密码错误</i>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    
+
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            posts:[],
+            isshowLoginPad:false,
+            userNameInput:"",
+            passwordInput:"",
+            userName:"",
+            isShowWarn:false
+        },
+        mounted(){
+            this.getPosts();
+            if(localStorage["userName"]!= null&& localStorage["userName"]!=''){
+                this.userName=localStorage["userName"];
+            }
+        },
+        methods:{
+            getPosts(){
+                axios.get("http://localhost:19611/Post/").then(res=>{
+                    console.log(res.data);
+                    this.posts = res.data;
+                })
+            },
+            transTime(time){
+                time = time.replace("T", " ");
+                time.substring(0, time.lastIndexOf(":"));
+            },
+            showLogin(isShow){
+                this.isshowLoginPad = isShow;
+            },
+            login(){
+                var data = new URLSearchParams();
+                data.append("userName", this.userNameInput);
+                data.append("password", this.passwordInput);
+
+                axios.post("http://localhost:19611/Login",data).then(res=>{
+                    if(res.data != ""){
+                        this.userName = res.data.userName;
+                        this.isShowWarn = false;
+                        this.isshowLoginPad = false;
+                        localStorage["userName"] = this.userName;
+                    }else{
+                        this.isShowWarn = true;
+                    }
+
+                })
+            }
+        },
+        filters:{
+
+        }
+    })
+</script>

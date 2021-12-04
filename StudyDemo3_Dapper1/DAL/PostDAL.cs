@@ -7,19 +7,19 @@ namespace StudyDemo3_Dapper
 {
     public class PostDAL
     {
-        DapperExtHelper<Post> dapperExtHelper = new DapperExtHelper<Post>();
+        DapperExtHelper<Posts> dapperExtHelper = new DapperExtHelper<Posts>();
 
-        public List<Post> GetPosts()
+        public List<Posts> GetPosts()
         {
             return dapperExtHelper.GetAll().ToList();
         }
 
-        public Post GetPost(int id)
+        public Posts GetPost(int id)
         {
             return dapperExtHelper.Get(id);
         }
 
-        public long Insert(Post post)
+        public long Insert(Posts post)
         {
             return dapperExtHelper.Insert(post);
         }

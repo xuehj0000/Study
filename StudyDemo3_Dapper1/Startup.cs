@@ -20,7 +20,10 @@ namespace StudyDemo3_Dapper1
         public void ConfigureServices(IServiceCollection services)
         {
             ConnOptions.ConnectionString = "Data Source=localhost;database=LTE;uid=SA;pwd=123456;";
+            // 注册服务器端缓存服务
             services.AddResponseCaching();
+            // 跨域
+            services.AddCors(ac => ac.AddPolicy("any", ap => ap.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())); 
             services.AddControllers();
         }
 
@@ -33,9 +36,11 @@ namespace StudyDemo3_Dapper1
             }
 
             app.UseRouting();
+            // 使用服务器端缓存
             app.UseResponseCaching();
-
             app.UseAuthorization();
+            // 使用跨域
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

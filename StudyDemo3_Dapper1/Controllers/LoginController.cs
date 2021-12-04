@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using StudyDemo3_Dapper1;
 
 namespace StudyDemo3_Dapper.Controllers
 {
+    [EnableCors("any")]
     [Route("[controller]")]
-    [ApiController]
+    //[ApiController]
     public class LoginController : ControllerBase
     {
 
         [HttpGet("{n}/{p}")]  // 设置传参规则
-        public User Get(string n, string p)
+        public Users Get(string n, string p)
         {
             var dal = new UserDAL();
             var model = dal.GetUserByLogin(n, p);
@@ -32,11 +34,18 @@ namespace StudyDemo3_Dapper.Controllers
         //    return model;
         //}
         [HttpGet("{id}")]
-        public User Get(int id)
+        public Users Get(int id)
         {
             var user = new UserDAL().Find(id);
             return user;
         }
 
-}
+        [HttpPost]
+        public Users Login(string userName, string password)
+        {
+            var user = new UserDAL().GetUserByLogin(userName, password);
+            return user;
+        }
+
+    }
 }
