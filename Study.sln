@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyDemo4_OcelotGetWay", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyDemo4_UserService", "StudyDemo4_UserService\StudyDemo4_UserService.csproj", "{A97FFC8A-9F3D-4220-AD0D-E092F0A65631}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyDemo4_ProductService", "StudyDemo4_ProductService\StudyDemo4_ProductService.csproj", "{B74AE247-4194-43C0-978F-A54C6DDBADA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{A97FFC8A-9F3D-4220-AD0D-E092F0A65631}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A97FFC8A-9F3D-4220-AD0D-E092F0A65631}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A97FFC8A-9F3D-4220-AD0D-E092F0A65631}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B74AE247-4194-43C0-978F-A54C6DDBADA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B74AE247-4194-43C0-978F-A54C6DDBADA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B74AE247-4194-43C0-978F-A54C6DDBADA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B74AE247-4194-43C0-978F-A54C6DDBADA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

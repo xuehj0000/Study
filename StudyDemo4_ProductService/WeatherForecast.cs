@@ -1,6 +1,6 @@
 using System;
 
-namespace StudyDemo4_UserService
+namespace StudyDemo4_ProductService
 {
     public class WeatherForecast
     {
@@ -11,7 +11,5 @@ namespace StudyDemo4_UserService
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 
         public string Summary { get; set; }
-
-        public string Port { get; set; }
     }
 }

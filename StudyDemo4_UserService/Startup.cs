@@ -27,7 +27,7 @@ namespace StudyDemo4_UserService
             {
                 rr.Address = new Uri("http://localhost:8500");
             }));
-            services.AddSwaggerGen(r => r.SwaggerDoc("v1", new OpenApiInfo
+            services.AddSwaggerGen(r => r.SwaggerDoc("user", new OpenApiInfo
             {
                 Title = "user api",
                 Version = "v1"
@@ -48,7 +48,7 @@ namespace StudyDemo4_UserService
 
             app.UseConsul(Configuration, consul);
             app.UseSwagger();
-            app.UseSwaggerUI(r => { r.SwaggerEndpoint("/swagger/v1/swagger.json", "user api"); });
+            app.UseSwaggerUI(r => { r.SwaggerEndpoint("/swagger/user/swagger.json", "user api"); });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

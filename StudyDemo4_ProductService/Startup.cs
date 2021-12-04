@@ -1,3 +1,4 @@
+using Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,15 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
-using Ocelot.Provider.Consul;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StudyDemo4_OcelotGetWay
+namespace StudyDemo4_ProductService
 {
     public class Startup
     {
@@ -28,18 +26,20 @@ namespace StudyDemo4_OcelotGetWay
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOcelot()  // Ocelot
-                .AddConsul();     // Ocelot.Provider.Consul
-            services.AddSwaggerGen(r => r.SwaggerDoc("v1", new OpenApiInfo
+            services.AddSingleton<IConsulClient>(r => new ConsulClient(rr =>
             {
-                Title = "Ocelot api",
+                rr.Address = new Uri("http://localhost:8500");
+            }));
+            services.AddSwaggerGen(r => r.SwaggerDoc("product", new OpenApiInfo
+            {
+                Title = "product api",
                 Version = "v1"
             }));
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConsulClient consul)
         {
             if (env.IsDevelopment())
             {
@@ -49,17 +49,15 @@ namespace StudyDemo4_OcelotGetWay
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseConsul(Configuration, consul);
             app.UseSwagger();
-            app.UseSwaggerUI(r => { 
-                r.SwaggerEndpoint("/user/swagger.json", "user api");
-                r.SwaggerEndpoint("/product/swagger.json", "product api");
-            });
+            app.UseSwaggerUI(r => { r.SwaggerEndpoint("/swagger/product/swagger.json", "product api"); });
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            app.UseOcelot();
         }
     }
 }
