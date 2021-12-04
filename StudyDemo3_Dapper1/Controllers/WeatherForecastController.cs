@@ -23,6 +23,7 @@ namespace StudyDemo3_Dapper1.Controllers
             _logger = logger;
         }
 
+        [ResponseCache(Duration =600)]  // 浏览器端缓存，600毫秒，换浏览器，缓存失效
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

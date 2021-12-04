@@ -20,6 +20,7 @@ namespace StudyDemo3_Dapper1
         public void ConfigureServices(IServiceCollection services)
         {
             ConnOptions.ConnectionString = "Data Source=localhost;database=LTE;uid=SA;pwd=123456;";
+            services.AddResponseCaching();
             services.AddControllers();
         }
 
@@ -32,6 +33,7 @@ namespace StudyDemo3_Dapper1
             }
 
             app.UseRouting();
+            app.UseResponseCaching();
 
             app.UseAuthorization();
 
