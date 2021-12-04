@@ -1,10 +1,7 @@
-﻿using Consul;
+﻿using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Consul;
 
 namespace StudyDemo4_UserService.Utility
 {
