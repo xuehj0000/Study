@@ -1,0 +1,10 @@
+<!--pages/productManager/productManager.wxml-->
+<view class="product-list">
+  <view class="product-item" wx:for="{{products}}" wx:key="id" wx:for-item="product">
+    <image src="{{product.image}}"></image>
+    <view class="product-info">
+      <view class="p-name">{{product.productName}}</view>
+      <view class="p-price">{{product.price}}</view>
+    </view>
+  </view>
+</view>

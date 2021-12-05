@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/productManager/productManager",
     "pages/userManager/userManager",
     "pages/main/main",
     

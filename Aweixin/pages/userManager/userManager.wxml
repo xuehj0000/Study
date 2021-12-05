@@ -7,10 +7,10 @@
     </view>
   </view>
   <view class="user-list">
-    <view class="user-item" wx:for="{{users}}">
-      <text class="u-id">{{item.id}}</text>
-      <text class="u-name">{{item.userName}}</text>
-      <text class="u-age">{{item.age}}</text>
+    <view class="user-item" wx:for="{{users}}" wx:key="id" wx:for-item="user">
+      <text class="u-id">{{user.id}}</text>
+      <text class="u-name">{{user.userName}}</text>
+      <text class="u-age">{{user.age}}</text>
     </view>
   </view>
 </view>
