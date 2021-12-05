@@ -1,0 +1,16 @@
+<!--pages/userManager/userManager.wxml-->
+<view>
+  <view class="search-text">
+    <view class="search-pad">
+      <input type="text" bindinput="textChange" bindtap="textChange" placeholder="请输入用户名" />
+      <text bindtap="search">搜索</text>
+    </view>
+  </view>
+  <view class="user-list">
+    <view class="user-item" wx:for="{{users}}">
+      <text class="u-id">{{item.id}}</text>
+      <text class="u-name">{{item.userName}}</text>
+      <text class="u-age">{{item.age}}</text>
+    </view>
+  </view>
+</view>

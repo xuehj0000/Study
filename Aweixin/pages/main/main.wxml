@@ -1,0 +1,3 @@
+<!--pages/main/main.wxml-->
+<button type="primary" style="margin-bottom:20px" bindtap="goList" data-type="user" data-bus="111">人事管理</button>
+<button type="primary" data-type="product">商品管理</button>

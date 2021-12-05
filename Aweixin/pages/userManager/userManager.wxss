@@ -1,0 +1,18 @@
+/* pages/userManager/userManager.wxss */
+
+.user-list .user-item text{
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #ccc;
+}
+.user-list .user-item .u-id{
+  width: 15px;
+  text-align: center;
+}
+.user-list .user-item .u-name{
+  width: 70%;
+}
+.user-list .user-item .u-age{
+  width: 15%;
+}
