@@ -9,6 +9,7 @@ namespace StudyDemo1
             //T16_QuartZ.Init().GetAwaiter().GetResult() ;
             T15_AOP.Use();
             Console.ReadLine();
+            Console.ReadKey();
         }
     }
 }

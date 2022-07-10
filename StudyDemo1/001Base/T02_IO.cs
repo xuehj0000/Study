@@ -20,8 +20,6 @@ namespace StudyDemo1
         /// <summary>
         /// 获取程序当前路径的可执行文件
         /// </summary>
-        /// <param name="args">程序的外部参数</param>
-        /// <returns></returns>
         public static void GetFiles(string[] args)
         {
             var path = ".";

@@ -36,7 +36,7 @@ namespace StudyDemo1
             {
                 var cmd = BuildCommand(conn, sql, cmdType, null, parameters);
                 o = cmd.ExecuteScalar();
-                cmd.Parameters.Clear();
+                cmd.Parameters.Clear();    // 避免paramter已添加问题
                 conn.Close();
             }
             return o;

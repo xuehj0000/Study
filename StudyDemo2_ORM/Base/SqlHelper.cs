@@ -40,13 +40,13 @@ namespace StudyDemo2_ORM
             }, SqlConnectionStringPool.DBOperateType.Read);
         }
 
-        public T Find<T>(Expression<Func<T, bool>> queryExpression) where T : BaseEntity,new()
+        public T Find<T>(Expression<Func<T, bool>> exps) where T : BaseEntity,new()
         {
             // 表实体类型
             Type type = typeof(T);
 
             // 表达式目录树访问者对象（解析表达式）
-            var where = new SqlVisitor<T>(queryExpression).GetSqlWhere();
+            var where = new SqlVisitor<T>(exps).GetSqlWhere();
             
             // 表列名字符串
             var columnString = string.Join(",", type.GetProperties().Select(a => $"[{a.GetMappingName()}]"));
